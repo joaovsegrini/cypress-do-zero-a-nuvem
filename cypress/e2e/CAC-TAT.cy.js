@@ -32,12 +32,12 @@ it('Teste numero de telefone inválido', () =>{
       .should('have.value', '')
   })
 
-it('Exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido', () =>{
+it.only('Exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido', () =>{
     cy.get('#firstName').type('João')
     cy.get('#lastName').type('Segrini')
     cy.get('#email').type('joao@test,com')
     cy.get('#open-text-area').type('test')
-    cy.get('#phone-checkbox').click()
+    cy.get('input[type="checkbox"][value="phone"]').check().should('be.checked')
     cy.contains('button', 'Enviar').click()
 
     cy.get('.error > strong').should('be.visible')
@@ -90,10 +90,35 @@ it('seleciona um produto (Mentoria) por seu valor', () => {
     .should('have.value', 'mentoria')
 })
 
-it.only('seleciona um produto (Blog) por seu índice', () => {
+it('seleciona um produto (Blog) por seu índice', () => {
   cy.get('#product')
     .select(1)
     .should('have.value', 'blog')
+})
+
+it('marca o tipo de atendimento "Feedback"', () =>{
+  cy.get('input[type="radio"][value="feedback"]')
+    .check()
+    .should('be.checked')
+})
+
+it('marca cada tipo de atendimento', () => {
+  cy.get('input[type="radio"]')
+    .each(typoOfService => {
+      cy.wrap(typoOfService)
+        .check()
+        .should('be.checked')
+    })
+})
+
+it('marca ambos checkboxes, depois desmarca o último', () => {
+  cy.get('input[type="checkbox"]')
+    .check()
+    .should('be.checked')
+    .last()
+    .uncheck()
+    .should('not.be.checked')
+
 })
 
 })
